@@ -1,0 +1,68 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>show temp</title>
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+
+      // sending a connect request to the server.
+      var socket = io.connect('http://localhost:5000');
+      var numbers_received = [];
+
+      socket.on('after connect', function (msg) {
+        console.log('After connect', msg);
+        $('#log').append('<br>' + $('<div/>').text('Received: ' + msg.data).html());
+      });
+
+      socket.on('newnumber', function (msg) {
+        if (numbers_received.length >= 10)
+          numbers_received.shift();
+        numbers_received.push(msg.number);
+        numbers_string = "";
+        for (var i = 0; i < numbers_received.length; i++) {
+          numbers_string = numbers_string + "<p>" + numbers_received[i].toString() + "</p>";
+        }
+        $("#log").html(numbers_string);
+      });
+    });
+  </script>
+
+</head>
+
+<body>
+
+  <div class="container-fluid">
+    <div class="jumbotron">
+      <hr class="my-4">
+      <h1 class="display-4"> {{ data }} </h1>
+      <p class="lead">random data</p>
+      <hr class="my-4">
+    </div>
+    <div id="log">
+    </div>
+  </div>
+
+</body>
+
+</html>
