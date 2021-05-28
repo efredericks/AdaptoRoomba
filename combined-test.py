@@ -19,43 +19,48 @@ cap = cv.VideoCapture(0)
 cap.set(3, 640)
 cap.set(4, 480)
 
+adapter.change_mode_to_full()
+
 while True:
-  ret, frame = cap.read()
+  adapter._send_cmd(adapter.CMD["Sensors"])
 
-  for barcode in decode(frame):
-    data = barcode.data.decode('utf-8')
-    data = data.lower()
 
-    adapter.change_mode_to_full()
+  # TBD: barcode stuff for later
+  # ret, frame = cap.read()
 
-    if data == "hazard":
-      print("Hazard spotted, adapting")
-      adapter.send_song_cmd(0, 9,
-              [69, 69, 69, 65, 72, 69, 65, 72, 69],
-              [40, 40, 40, 30, 10, 40, 30, 10, 80])
-      adapter.send_play_cmd(0)
-      sleep(10.0)
-      break
+  # for barcode in decode(frame):
+  #   data = barcode.data.decode('utf-8')
+  #   data = data.lower()
 
-    elif data == "start":
-      print("Driving for 2s")
-      adapter.change_mode_to_full()
-      adapter.move(0.1, 0.0)
-      #adapter.send_drive_direct(100, 100)
-      sleep(2.0)
-      break
 
-    elif data == "stop":
-      print("Stopping")
-      #adapter.move(0.0, 0.0)
-      adapter.change_mode_to_safe()
-      adapter.send_drive_direct(0, 0)
-      sleep(1.0)
-      break
+  #   if data == "hazard":
+  #     print("Hazard spotted, adapting")
+  #     adapter.send_song_cmd(0, 9,
+  #             [69, 69, 69, 65, 72, 69, 65, 72, 69],
+  #             [40, 40, 40, 30, 10, 40, 30, 10, 80])
+  #     adapter.send_play_cmd(0)
+  #     sleep(10.0)
+  #     break
 
-    else:
-      print("Not implemented - [{0}]".format(data))
-      break
+  #   elif data == "start":
+  #     print("Driving for 2s")
+  #     adapter.change_mode_to_full()
+  #     adapter.move(0.1, 0.0)
+  #     #adapter.send_drive_direct(100, 100)
+  #     sleep(2.0)
+  #     break
+
+  #   elif data == "stop":
+  #     print("Stopping")
+  #     #adapter.move(0.0, 0.0)
+  #     adapter.change_mode_to_safe()
+  #     adapter.send_drive_direct(0, 0)
+  #     sleep(1.0)
+  #     break
+
+  #   else:
+  #     print("Not implemented - [{0}]".format(data))
+  #     break
 
     #elif data == "stop":
     #  adapter.
