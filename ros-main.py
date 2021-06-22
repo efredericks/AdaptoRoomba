@@ -15,6 +15,7 @@ start_time = rospy.get_time()
 duration = 1.0/100.0 # timer
 battery = BatteryMonitor(duration)
 
+# Write out data and safely shutdown ROS
 def end_experiment(event=None):
   elapsed_time = rospy.get_time() - start_time
   print("Experiment complete - [{0}] seconds.".format(str(elapsed_time)))
