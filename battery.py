@@ -1,5 +1,5 @@
 import rospy
-from std_msgs.msg import Float32, Int16
+from std_msgs.msg import Float32, Int16, Empty
 from create_msgs.msg import ChargingState
 import threading
 
@@ -57,7 +57,33 @@ class BatteryMonitor():
          'callback': 'read_voltage',
          'timer_callback': 'timer_voltage',
          'data': [],
-         'cnt': 0}
+         'cnt': 0},
+      'spot_button':
+        {'type'    : Empty,
+         'callback': 'read_spot_button',
+         'timer_callback': 'timer_spot_button',
+         'data': [],
+         'cnt': 0},
+      'wheeldrop':
+        {'type'    : Empty,
+         'callback': 'read_wheeldrop',
+         'timer_callback': 'timer_wheeldrop',
+         'data': [],
+         'cnt': 0},
+
+
+#      'bumper':                 Bumper,
+#      'clean_button':           Empty,
+#      'day_button':             Empty,
+#      'hour_button':            Empty,
+#      'minute_button':          Empty,
+#      'dock_button':            Empty,
+#      'spot_button':            Empty,
+#      'ir_omni':                UInt16,
+#      'joint_states':           JointState,
+#      'mode':                   Mode,
+#      'odom':                   Odometry,
+#     'wheeldrop':              Empty
     }
 
     # Setup timer and callback
@@ -67,9 +93,9 @@ class BatteryMonitor():
       temp_cb = eval("self.{0}".format(values['callback']))
       rospy.Subscriber(topic, values['type'], temp_cb)
 
-      #timer_temp_cb = eval("self.{0}".format(values['timer_callback']))
-      #timer_temp_cb_lambda = lambda x: timer_temp_cb(x, topic)
-      #rospy.Timer(rospy.Duration(self.duration), timer_temp_cb_lambda)
+      timer_temp_cb = eval("self.{0}".format(values['timer_callback']))
+      timer_temp_cb_lambda = lambda x: timer_temp_cb(x, topic)
+      rospy.Timer(rospy.Duration(self.duration), timer_temp_cb_lambda)
 
 
   # Helper functions
@@ -85,7 +111,7 @@ class BatteryMonitor():
     topic = self.trim_topic(data._connection_header['topic'])
 
     if (len(self.topics[topic]['data']) == 5):
-      print(topic, average(self.topics[topic]['data']))
+      #print(topic, average(self.topics[topic]['data']))
       self.topics[topic]['data'] = []
     else:
       self.topics[topic]['data'].append(data.data)
@@ -93,7 +119,7 @@ class BatteryMonitor():
     topic = self.trim_topic(data._connection_header['topic'])
 
     if (len(self.topics[topic]['data']) == 5):
-      print(topic, average(self.topics[topic]['data']))
+      #print(topic, average(self.topics[topic]['data']))
       self.topics[topic]['data'] = []
     else:
       self.topics[topic]['data'].append(data.data)
@@ -101,7 +127,7 @@ class BatteryMonitor():
     topic = self.trim_topic(data._connection_header['topic'])
 
     if (len(self.topics[topic]['data']) == 5):
-      print(topic, average(self.topics[topic]['data']))
+      #print(topic, average(self.topics[topic]['data']))
       self.topics[topic]['data'] = []
     else:
       self.topics[topic]['data'].append(data.data)
@@ -109,7 +135,7 @@ class BatteryMonitor():
     topic = self.trim_topic(data._connection_header['topic'])
 
     if (len(self.topics[topic]['data']) == 5):
-      print(topic, average(self.topics[topic]['data']))
+      #print(topic, average(self.topics[topic]['data']))
       self.topics[topic]['data'] = []
     else:
       self.topics[topic]['data'].append(data.data)
@@ -117,7 +143,7 @@ class BatteryMonitor():
     topic = self.trim_topic(data._connection_header['topic'])
 
     if (len(self.topics[topic]['data']) == 5):
-      print(topic, average(self.topics[topic]['data']))
+      #print(topic, average(self.topics[topic]['data']))
       self.topics[topic]['data'] = []
     else:
       self.topics[topic]['data'].append(data.data)
@@ -125,7 +151,7 @@ class BatteryMonitor():
     topic = self.trim_topic(data._connection_header['topic'])
 
     if (len(self.topics[topic]['data']) == 5):
-      print(topic, average(self.topics[topic]['data']))
+      #print(topic, average(self.topics[topic]['data']))
       self.topics[topic]['data'] = []
     else:
       self.topics[topic]['data'].append(data.data)
@@ -133,10 +159,24 @@ class BatteryMonitor():
     topic = self.trim_topic(data._connection_header['topic'])
 
     if (len(self.topics[topic]['data']) == 5):
-      print(topic, average(self.topics[topic]['data']))
+      #print(topic, average(self.topics[topic]['data']))
       self.topics[topic]['data'] = []
     else:
       self.topics[topic]['data'].append(data.data)
+
+  def read_spot_button(self, data):
+    topic = self.trim_topic(data._connection_header['topic'])
+    print("Thanks for pushing me in the right spot")
+
+    #if (len(self.topics[topic]['data']) == 5):
+    #  print(topic, average(self.topics[topic]['data']))
+    #  self.topics[topic]['data'] = []
+    #else:
+    #  self.topics[topic]['data'].append('push')#data.data)
+
+  def read_wheeldrop(self, data):
+    topic = self.trim_topic(data._connection_header['topic'])
+    print("PUT ME DOWN!")
 
   # Timer callback (averages/acts upon data)
   def timer_capacity(self, data, topic):
@@ -164,6 +204,14 @@ class BatteryMonitor():
       print(topic, self.topics[topic]['data'])
       self.topics[topic]['data'] = []
   def timer_voltage(self, data, topic):
+    if (len(self.topics[topic]['data']) >= 5):
+      print(topic, self.topics[topic]['data'])
+      self.topics[topic]['data'] = []
+  def timer_spot_button(self, data, topic):
+    if (len(self.topics[topic]['data']) >= 5):
+      print(topic, self.topics[topic]['data'])
+      self.topics[topic]['data'] = []
+  def timer_wheeldrop(self, data, topic):
     if (len(self.topics[topic]['data']) >= 5):
       print(topic, self.topics[topic]['data'])
       self.topics[topic]['data'] = []
