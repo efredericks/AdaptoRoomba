@@ -21,7 +21,7 @@ If stuck not-charging, place on dock and command to dock:
 
 ### Power test
 
-1. Run Roomba <x> times for <y> minutes and report final battery level
+1. Run Roomba X times for Y minutes and report final battery level
 2. Add testing topic and continuous testing
 3. Re-run (1) and compare
 
